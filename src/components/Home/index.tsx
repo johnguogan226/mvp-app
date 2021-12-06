@@ -1,4 +1,3 @@
-import Container from '@mui/material/Container';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { styled } from '@mui/material/styles';
@@ -9,7 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import './index.css';
+
+const postsUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -40,12 +41,17 @@ type Post = {
 
 function Home() {
     const navigate = useNavigate();
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<Post[]>([]);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/posts')
-            .then(response => response.json())
-            .then(data => { setPosts(data); console.log(data) })
+        let fetchPosts = new Promise<Post[]>((resolve, reject) => {
+            fetch(postsUrl)
+                .then(response => response.json())
+                .then(data => resolve(data))
+                .catch(error => reject(error));
+        })
+        fetchPosts
+            .then(data => setPosts(data))
             .catch(error => console.log(error));
         return () => {
 

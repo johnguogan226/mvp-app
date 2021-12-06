@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './User.css';
+import './index.css';
 
 type Geo = {
     lat: string,
@@ -33,17 +33,24 @@ type User = {
     website: string
 }
 
-export default function User() {
+const userUrl = 'https://jsonplaceholder.typicode.com/users';
+
+export default function Profile() {
     const params = useParams();
     const [user, setUser] = useState<User>();
 
     useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/users/${params.userId}`)
-            .then(response => response.json())
-            .then(data => {setUser(data); console.log(data)})
+        let fetchUser = new Promise<User>((resolve, reject) => {
+            fetch(`${userUrl}/${params.userId}`)
+               .then(response => response.json())
+               .then(data => resolve(data))
+               .catch(error => reject(error));
+        })
+        fetchUser
+            .then(data => setUser(data))
             .catch(error => console.log(error));
         return () => {
-            
+
         }
     }, [params.userId])
 

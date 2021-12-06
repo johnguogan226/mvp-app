@@ -4,8 +4,8 @@ import {
   Route
 } from 'react-router-dom';
 
-import Home from './Home';
-import User from './User';
+import Home from './components/Home';
+import Profile from './components/Profile';
 
 import './App.css';
 
@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/user/:userId" element={<User />} />
+        <Route path="/user/:userId" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
